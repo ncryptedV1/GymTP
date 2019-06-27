@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Gymnasium Templin</string>
+
+    <!-- Settings -->
+    <string name="settings_file_key">de.ncrypted.gymtp</string>
+    <string name="saved_filter_state">filter</string>
+    <string name="saved_filter_teacher_state">filterTeacher</string>
+    <string name="saved_filter_teacher_name">filterTeacherName</string>
+    <string name="saved_filter_grade">filterGrade</string>
+</resources>

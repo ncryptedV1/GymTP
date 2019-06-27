@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableRow xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/row_first"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="3dp"
+        android:text="First"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/text"
+        android:textSize="14sp"
+        android:textAlignment="viewStart"
+        android:layout_marginRight="4dp"/>
+
+    <TextView
+        android:id="@+id/row_second"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.7"
+        android:fontFamily="sans-serif"
+        android:text="Second"
+        android:textColor="@color/text"
+        android:textSize="14sp"
+        android:textAlignment="inherit"
+        android:layout_marginRight="4dp" />
+
+    <TextView
+        android:id="@+id/row_third"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif"
+        android:text="Third"
+        android:textColor="@color/text"
+        android:textSize="14sp"
+        android:textAlignment="inherit"
+        android:layout_marginRight="4dp" />
+
+    <TextView
+        android:id="@+id/row_fourth"
+        android:layout_width="0px"
+        android:layout_height="wrap_content"
+        android:layout_weight="1.5"
+        android:layout_marginRight="3dp"
+        android:fontFamily="sans-serif"
+        android:textAlignment="inherit"
+        android:textColor="@color/text"
+        android:textSize="14sp"
+        android:text="Fourth" />
+</TableRow>
