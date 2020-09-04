@@ -10,11 +10,12 @@ import android.view.View;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import java.util.List;
 
 import de.oschirmer.gymtp.R;
 import de.oschirmer.gymtp.coverplan.holder.CoverPlanRow;
-import de.oschirmer.gymtp.settings.SettingsStore;
 
 class CoverPlanTableAdapter {
 
@@ -26,7 +27,6 @@ class CoverPlanTableAdapter {
         this.context = context;
         this.tableLayout = tableLayout;
         this.rows = rows;
-        filterSort();
     }
 
     public int getCount() {
@@ -45,9 +45,9 @@ class CoverPlanTableAdapter {
         holder = new CoverPlanRowViewHolder(view);
 
         if (position % 2 == 0) {
-            view.setBackgroundColor(context.getColor(R.color.tableRowAlternate));
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.tableRowAlternate));
         } else {
-            view.setBackgroundColor(context.getColor(R.color.tableRowNormal));
+            view.setBackgroundColor(ContextCompat.getColor(context, R.color.tableRowNormal));
         }
 
         CoverPlanRow row = getItem(position);
@@ -72,41 +72,9 @@ class CoverPlanTableAdapter {
 
     public void update(List<CoverPlanRow> rows) {
         this.rows = rows;
-        filterSort();
         tableLayout.removeAllViews();
         for (int i = 0; i < getCount(); i++) {
             tableLayout.addView(getView(i));
-        }
-    }
-
-    private void filterSort() {
-        SettingsStore settings = SettingsStore.getInstance(context);
-        if (settings.isFilter()) {
-            boolean teacher = settings.isTeacher();
-            int grade = settings.getGrade();
-            String teacherName = settings.getTeacherName();
-            rows.sort((row1, row2) -> {
-                boolean first;
-                boolean second;
-                if (teacher) {
-                    if(row1.getTeacher().equals("Vertretung") || row2.getTeacher().equals("Vertretung")) {
-                        return 0;
-                    }
-                    first = row1.getTeacher().contains(teacherName);
-                    second = row2.getTeacher().contains(teacherName);
-                    row1.setTeacherBold(first);
-                    row2.setTeacherBold(second);
-                } else {
-                    if(row1.getGrade().equals("Klasse") || row2.getGrade().equals("Klasse")) {
-                        return 0;
-                    }
-                    first = row1.getGrade().contains(grade + "");
-                    second = row2.getGrade().contains(grade + "");
-                    row1.setGradeBold(first);
-                    row2.setGradeBold(second);
-                }
-                return first && !second ? -1 : !first && second ? 1 : 0;
-            });
         }
     }
 

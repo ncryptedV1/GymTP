@@ -1,26 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="6dp">
 
-    <TextView
-        android:id="@+id/heading_filter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Filter"
-        android:textColor="@color/text_heading"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
     <Switch
         android:id="@+id/filter_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/heading_filter"
         android:checked="false"
         android:switchPadding="4dp"
         android:text="Filtern"
@@ -29,10 +17,22 @@
         android:theme="@style/SwitchStyleColor" />
 
     <Switch
-        android:id="@+id/teacher_switch"
+        android:id="@+id/push_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/filter_switch"
+        android:checked="false"
+        android:switchPadding="4dp"
+        android:text="Push-Benachrichtigung"
+        android:textColor="@color/text"
+        android:textSize="16sp"
+        android:theme="@style/SwitchStyleColor" />
+
+    <Switch
+        android:id="@+id/teacher_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/push_switch"
         android:switchPadding="4dp"
         android:text="Lehrer"
         android:textColor="@color/text"
@@ -67,7 +67,7 @@
         android:text="Name:"
         android:textColor="@color/text"
         android:textSize="16sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <EditText
         android:id="@+id/teacher_name_field"

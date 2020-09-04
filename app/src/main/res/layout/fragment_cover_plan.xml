@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp">
+        android:layout_marginRight="6dp"
+        android:paddingBottom="6dp">
 
         <TextView
             android:id="@+id/date"
@@ -18,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="3dp"
             android:text="Montag, 01. Januar 2000"
             android:textAlignment="center"
             android:textColor="@color/text_heading"
@@ -31,37 +33,38 @@
             android:layout_below="@+id/date"
             android:layout_marginTop="10dp">
             android:layout_marginBottom="10dp">
+
             <Button
                 android:id="@+id/yesterday"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Gestern"
-                android:textColor="@color/text_heading"
                 android:background="@drawable/round_button"
-                android:textAllCaps="false" />
+                android:text="Gestern"
+                android:textAllCaps="false"
+                android:textColor="@color/text_heading" />
 
             <Button
                 android:id="@+id/today"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
-                android:text="Heute"
-                android:textColor="@color/text_heading"
+                android:layout_weight="1"
                 android:background="@drawable/round_button"
-                android:textAllCaps="false" />
+                android:text="Heute"
+                android:textAllCaps="false"
+                android:textColor="@color/text_heading" />
 
             <Button
                 android:id="@+id/tomorrow"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Morgen"
-                android:textColor="@color/text_heading"
                 android:background="@drawable/round_button"
-                android:textAllCaps="false" />
+                android:text="Morgen"
+                android:textAllCaps="false"
+                android:textColor="@color/text_heading" />
         </LinearLayout>
 
         <TextView
@@ -118,9 +121,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/heading_anmerkung"
+            android:background="@drawable/textview_border"
             android:textColor="@color/text"
-            android:textSize="16sp"
-            android:background="@drawable/textview_border"/>
+            android:textSize="16sp" />
 
         <ProgressBar
             android:id="@+id/loading_cover_plan"

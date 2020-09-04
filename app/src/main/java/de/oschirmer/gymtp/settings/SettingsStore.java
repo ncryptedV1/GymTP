@@ -10,7 +10,9 @@ public class SettingsStore {
     private static SettingsStore instance;
 
     private SharedPreferences preferences;
+    public String activityStateKey;
     public String filterStateKey;
+    public String pushStateKey;
     public String filterTeacherStateKey;
     public String filterTeacherNameKey;
     public String filterGradeKey;
@@ -20,27 +22,36 @@ public class SettingsStore {
     }
 
     public static SettingsStore getInstance(Context context) {
-        if(instance == null) {
+        if (instance == null) {
             instance = new SettingsStore(context);
         }
         return instance;
     }
 
-     private void load(Context context) {
-         preferences = context.getSharedPreferences(context.getString(R.string.settings_file_key), context.MODE_PRIVATE);
+    private void load(Context context) {
+        preferences = context.getSharedPreferences(context.getString(R.string.settings_file_key), context.MODE_PRIVATE);
 
-         filterStateKey = context.getString(R.string.saved_filter_state);
-         filterTeacherStateKey = context.getString(R.string.saved_filter_teacher_state);
-         filterTeacherNameKey = context.getString(R.string.saved_filter_teacher_name);
-         filterGradeKey = context.getString(R.string.saved_filter_grade);
-     }
+        activityStateKey = context.getString(R.string.activity_state);
+        pushStateKey = context.getString(R.string.saved_push_state);
+        filterTeacherStateKey = context.getString(R.string.saved_filter_teacher_state);
+        filterTeacherNameKey = context.getString(R.string.saved_filter_teacher_name);
+        filterGradeKey = context.getString(R.string.saved_filter_grade);
+    }
 
-     public SharedPreferences getPrefs() {
+    public SharedPreferences getPrefs() {
         return preferences;
-     }
+    }
+
+    public boolean isActivityShown() {
+        return getPrefs().getBoolean(activityStateKey, false);
+    }
 
     public boolean isFilter() {
         return getPrefs().getBoolean(filterStateKey, false);
+    }
+
+    public boolean isPush() {
+        return getPrefs().getBoolean(pushStateKey, false);
     }
 
     public boolean isTeacher() {

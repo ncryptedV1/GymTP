@@ -10,6 +10,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,23 +65,23 @@ public class DatesPlanRowAdapter {
         holder = new DatesPlanRowViewHolder(textViews);
 
         if (position % 2 == 0) {
-            tableRow.setBackgroundColor(context.getColor(R.color.tableRowAlternate));
+            tableRow.setBackgroundColor(ContextCompat.getColor(context, R.color.tableRowAlternate));
         } else {
-            tableRow.setBackgroundColor(context.getColor(R.color.tableRowNormal));
+            tableRow.setBackgroundColor(ContextCompat.getColor(context, R.color.tableRowNormal));
         }
 
         for (int i = 0; i < datesPlanRow.getColumnCount(); i++) {
             TextView textView = holder.textViews.get(i);
             textView.setText(datesPlanRow.getItems().get(i));
-                ViewGroup.LayoutParams lp = textView.getLayoutParams();
-                if (lp instanceof ViewGroup.MarginLayoutParams) {
-                    if (i == 0) {
-                        ((ViewGroup.MarginLayoutParams) lp).leftMargin = GtpActivity.dpToPx(context, 3);
-                    } else if (i == datesPlanRow.getColumnCount()-1) {
-                        ((ViewGroup.MarginLayoutParams) lp).rightMargin = GtpActivity.dpToPx(context, 3);
-                    }
-                    //... etc
+            ViewGroup.LayoutParams lp = textView.getLayoutParams();
+            if (lp instanceof ViewGroup.MarginLayoutParams) {
+                if (i == 0) {
+                    ((ViewGroup.MarginLayoutParams) lp).leftMargin = GtpActivity.dpToPx(context, 3);
+                } else if (i == datesPlanRow.getColumnCount() - 1) {
+                    ((ViewGroup.MarginLayoutParams) lp).rightMargin = GtpActivity.dpToPx(context, 3);
                 }
+                //... etc
+            }
         }
 
         return tableRow;

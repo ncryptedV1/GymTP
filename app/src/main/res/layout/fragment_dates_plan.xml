@@ -10,7 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="6dp"
-        android:layout_marginRight="6dp">
+        android:layout_marginRight="6dp"
+        android:paddingBottom="6dp">
 
         <TableLayout
             android:id="@+id/list_dates_tables"
@@ -26,5 +27,16 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             tools:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/dates_not_available"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Aktuell sind keine Termine verfügbar"
+            android:textAlignment="center"
+            android:textSize="22sp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone" />
     </RelativeLayout>
 </ScrollView>

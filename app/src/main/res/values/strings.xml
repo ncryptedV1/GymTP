@@ -3,8 +3,16 @@
 
     <!-- Settings -->
     <string name="settings_file_key">de.ncrypted.gymtp</string>
+    <string name="activity_state">activityState</string>
     <string name="saved_filter_state">filter</string>
+    <string name="saved_push_state">push</string>
     <string name="saved_filter_teacher_state">filterTeacher</string>
     <string name="saved_filter_teacher_name">filterTeacherName</string>
     <string name="saved_filter_grade">filterGrade</string>
+
+    <string name="push_channel_id">newEntries</string>
+    <string name="push_channel_name">Neue Einträge</string>
+    <string name="push_channel_description">Neue Vertretungen oder Raumänderungen</string>
+    <string name="push_group_id_coverplan">de.oschirmer.gymtp.fetch.COVER_PLAN_ENTRIES</string>
+    <string name="push_group_id_roomchange">de.oschirmer.gymtp.fetch.ROOM_CHANGE_ENTRIES</string>
 </resources>

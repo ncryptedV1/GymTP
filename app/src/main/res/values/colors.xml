@@ -8,4 +8,6 @@
     <color name="text">#000</color>
     <color name="tableRowAlternate">#19007DC0</color>
     <color name="tableRowNormal">#19FFFFFF</color>
+    <color name="tabBackgroundSelected">#CCCCCC</color>
+    <color name="tabBackgroundUnselected">#E2E2E2</color>
 </resources>

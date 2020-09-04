@@ -1,21 +1,30 @@
 package de.oschirmer.gymtp;
 
+import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
+import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 
-import de.oschirmer.gymtp.coverplan.CoverPlanFetcher;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.tabs.TabLayout;
+
 import de.oschirmer.gymtp.coverplan.CoverPlanFragment;
+import de.oschirmer.gymtp.coverplan.fetch.FetchAlarmReceiver;
 import de.oschirmer.gymtp.dates.DatesPlanFragment;
 import de.oschirmer.gymtp.settings.SettingsFragment;
 import de.oschirmer.gymtp.settings.SettingsStore;
@@ -27,16 +36,12 @@ public class GtpActivity extends AppCompatActivity {
     private DatesPlanFragment datesPlanFragment;
     private SettingsFragment settingsFragment;
     private ViewPager viewPager;
+    public String htmlDateParam;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_gtp);
-
-        CoverPlanFetcher.setContext(getApplicationContext());
-
-        // load settings
-        SettingsStore.getInstance(this);
 
         // Create the adapter that will return a fragment for each of the sections
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -49,7 +54,7 @@ public class GtpActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 sectionsPagerAdapter.getItem(position);
                 if (position == 0) {
-                    coverPlanFragment.updateCurrent();
+                    coverPlanFragment.specific(null);
                 } else if (position == 1) {
                     datesPlanFragment.update();
                 }
@@ -60,6 +65,55 @@ public class GtpActivity extends AppCompatActivity {
         // Add Tabs for easier identifying
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        // Load specific date, when opened via URI
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        Uri data = intent.getData();
+        if (action == Intent.ACTION_VIEW) {
+            htmlDateParam = "?d=" + data.getQueryParameter("d");
+        }
+
+        // register push-notification channel
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.push_channel_name);
+            String description = getString(R.string.push_channel_description);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(getString(R.string.push_channel_id), name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // remove existing notifications
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancelAll();
+
+        // start background fetch alarm for coverplan etc
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        Intent alarmIntent = new Intent(this, FetchAlarmReceiver.class);
+        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), FetchAlarmReceiver.ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FetchAlarmReceiver.FETCH_TIME, pendingAlarmIntent);
+        } else {
+            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FetchAlarmReceiver.FETCH_TIME, pendingAlarmIntent);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SettingsStore store = SettingsStore.getInstance(this);
+        store.getPrefs().edit().putBoolean(store.activityStateKey, true).apply();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        SettingsStore store = SettingsStore.getInstance(this);
+        store.getPrefs().edit().putBoolean(store.activityStateKey, false).apply();
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
