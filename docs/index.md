@@ -1,37 +1,11 @@
-## Welcome to GitHub Pages
-
-You can use the [editor on GitHub](https://github.com/ncryptedV1/GymTP/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/ncryptedV1/GymTP/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Gymnasium Templin
+<h1>Datenschutzerklärung</h1>
+<h2>Einleitung</h2>
+<p>Mit der folgenden Datenschutzerklärung möchten wir Sie darüber aufklären, welche Arten Ihrer personenbezogenen Daten (nachfolgend auch kurz als "Daten“ bezeichnet) wir zu welchen Zwecken und in welchem Umfang im Rahmen der Bereitstellung unserer Applikation verarbeiten.</p>
+<p>Die verwendeten Begriffe sind nicht geschlechtsspezifisch.</p>
+<p>Stand: 29. Oktober 2021</p><h2>Inhaltsübersicht</h2> <ul class="index"><li><a class="index-link" href="#m3">Verantwortlicher</a></li><li><a class="index-link" href="#mOverview">Übersicht der Verarbeitungen</a></li><li><a class="index-link" href="#m15">Änderung und Aktualisierung der Datenschutzerklärung</a></li></ul><h2 id="m3">Verantwortlicher</h2><p>Oliver Schirmer<br>76137 Karlsruhe<br>Deutschland</p>
+<p>E-Mail-Adresse: <a href="mailto:orschirmer@gmail.com">orschirmer@gmail.com</a>.</p>
+<h2 id="mOverview">Übersicht der Verarbeitungen</h2><p>Die nachfolgende Übersicht fasst die Arten der verarbeiteten Daten und die Zwecke ihrer Verarbeitung zusammen und verweist auf die betroffenen Personen.</p><h3>Arten der verarbeiteten Daten</h3>
+<ul><li>Bestandsdaten (z.B. Namen, Adressen).</li><li>Inhaltsdaten (z.B. Eingaben in Onlineformularen).</li><li>Kontaktdaten (z.B. E-Mail, Telefonnummern).</li><li>Meta-/Kommunikationsdaten (z.B. Geräte-Informationen, IP-Adressen).</li><li>Nutzungsdaten (z.B. besuchte Webseiten, Interesse an Inhalten, Zugriffszeiten).</li><li>Vertragsdaten (z.B. Vertragsgegenstand, Laufzeit, Kundenkategorie).</li><li>Zahlungsdaten (z.B. Bankverbindungen, Rechnungen, Zahlungshistorie).</li></ul><h3>Kategorien betroffener Personen</h3><ul><li>Kommunikationspartner.</li><li>Nutzer (z.B. Webseitenbesucher, Nutzer von Onlinediensten).</li></ul><h3>Zwecke der Verarbeitung</h3><ul><li>Direktmarketing (z.B. per E-Mail oder postalisch).</li><li>Kontaktanfragen und Kommunikation.</li><li>Erbringung vertraglicher Leistungen und Kundenservice.</li></ul><h2 id="m15">Änderung und Aktualisierung der Datenschutzerklärung</h2><p>Wir bitten Sie, sich regelmäßig über den Inhalt unserer Datenschutzerklärung zu informieren. Wir passen die Datenschutzerklärung an, sobald die Änderungen der von uns durchgeführten Datenverarbeitungen dies erforderlich machen. Wir informieren Sie, sobald durch die Änderungen eine Mitwirkungshandlung Ihrerseits (z.B. Einwilligung) oder eine sonstige individuelle Benachrichtigung erforderlich wird.</p>
+<p>Sofern wir in dieser Datenschutzerklärung Adressen und Kontaktinformationen von Unternehmen und Organisationen angeben, bitten wir zu beachten, dass die Adressen sich über die Zeit ändern können und bitten die Angaben vor Kontaktaufnahme zu prüfen.</p>
+<p class="seal"><a href="https://datenschutz-generator.de/?l=de" title="Rechtstext von Dr. Schwenke - für weitere Informationen bitte anklicken." target="_blank" rel="noopener noreferrer nofollow">Erstellt mit kostenlosem Datenschutz-Generator.de von Dr. Thomas Schwenke</a></p>
