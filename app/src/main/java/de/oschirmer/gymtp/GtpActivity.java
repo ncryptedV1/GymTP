@@ -94,7 +94,7 @@ public class GtpActivity extends AppCompatActivity {
         // start background fetch alarm for coverplan etc
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent alarmIntent = new Intent(this, FetchAlarmReceiver.class);
-        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), FetchAlarmReceiver.ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), FetchAlarmReceiver.ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FetchAlarmReceiver.FETCH_TIME, pendingAlarmIntent);
         } else {
