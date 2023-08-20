@@ -31,7 +31,7 @@ public class DatesPlanFragment extends Fragment {
 
         datesPlanTableAdapter = new DatesPlanTableAdapter(getContext(), view.findViewById(R.id.list_dates_tables), new ArrayList<>());
         loading = view.findViewById(R.id.loading_dates);
-        fetcher = DatesPlanFetcher.getInstance(view.getContext());
+        fetcher = DatesPlanFetcher.getInstance();
         notAvailableTextView = view.findViewById(R.id.dates_not_available);
 
         update();

@@ -25,10 +25,9 @@ import de.oschirmer.gymtp.settings.SettingsStore;
 public class FetchAlarmReceiver extends BroadcastReceiver {
 
     private Context context;
-    private GtpDatabase gtpDatabase;
 
     public static final int ALARM_ID = 678;
-    public static final long FETCH_TIME = 10 * 60 * 1000;
+    public static final long FETCH_TIME = 5 * 1000;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -37,17 +36,17 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
         Log.v("fetch", "Started");
 
         // schedule next background fetch
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent alarmIntent = new Intent(context, FetchAlarmReceiver.class);
-        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(context.getApplicationContext(), ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FETCH_TIME, pendingAlarmIntent);
+        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(context.getApplicationContext(), ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
+            alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FETCH_TIME, pendingAlarmIntent);
         } else {
-            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FETCH_TIME, pendingAlarmIntent);
+            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FETCH_TIME, pendingAlarmIntent);
         }
 
         // setup cache-database
-        gtpDatabase = Room.databaseBuilder(context.getApplicationContext(), GtpDatabase.class, "gtp-database").build();
+        Room.databaseBuilder(context.getApplicationContext(), GtpDatabase.class, "gtp-database").build();
 
         Log.v("fetch", "Working...");
         //testPush("Test", "Time: " + (new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime())));
@@ -71,6 +70,7 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
 
                     boolean groupSent = false;
                     for (CoverPlanRow row : newCoverPlan) {
+                        Log.v("fetch", "New-Row: " + row.toString());
                         if (row.getGrade().startsWith(CoverPlanRow.BOLD_PREFIX)) {
                             if (!groupSent) {
                                 groupNotification(false);
@@ -120,12 +120,12 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, context.getString(R.string.push_channel_id));
         builder.setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
-                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, GtpActivity.class), 0))
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, GtpActivity.class), PendingIntent.FLAG_IMMUTABLE))
                 .setGroup(context.getString(roomChangeGroup ? R.string.push_group_id_roomchange : R.string.push_group_id_coverplan))
                 .setGroupSummary(true)
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
 
-        NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(roomChangeGroup ? ROOMCHANGE_GROUP_ID : COVERPLAN_GROUP_ID, builder.build());
     }
 
@@ -135,14 +135,13 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
                 .setContentText(text)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
-                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, GtpActivity.class), 0))
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, GtpActivity.class), PendingIntent.FLAG_IMMUTABLE))
                 .setGroup(context.getString(roomChangeGroup ? R.string.push_group_id_roomchange : R.string.push_group_id_coverplan))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
-        }
+        builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
+        Log.v("fetch", "Sent push with title " + title + " & text " + text);
 
-        NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(notificationId++, builder.build());
     }
 
@@ -152,13 +151,11 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
                 .setContentText(text)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setAutoCancel(true)
-                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, GtpActivity.class), 0))
+                .setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, GtpActivity.class), PendingIntent.FLAG_IMMUTABLE))
                 .setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
-        }
+        builder.setPriority(NotificationManager.IMPORTANCE_HIGH);
 
-        NotificationManager manager = (NotificationManager) context.getSystemService(context.NOTIFICATION_SERVICE);
+        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         manager.notify(notificationId++, builder.build());
     }
 }

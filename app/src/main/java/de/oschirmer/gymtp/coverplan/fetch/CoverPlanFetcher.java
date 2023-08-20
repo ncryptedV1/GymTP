@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import de.oschirmer.gymtp.coverplan.holder.CoverPlan;
 import de.oschirmer.gymtp.coverplan.holder.CoverPlanRow;
 import de.oschirmer.gymtp.settings.SettingsStore;
-import java9.util.function.Consumer;
 
 public class CoverPlanFetcher {
 

@@ -1,7 +1,5 @@
 package de.oschirmer.gymtp.dates;
 
-import android.content.Context;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,37 +9,28 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.function.Consumer;
 
 import de.oschirmer.gymtp.coverplan.fetch.Request;
 import de.oschirmer.gymtp.dates.holder.DatesPlanRow;
 import de.oschirmer.gymtp.dates.holder.DatesPlanTable;
-import de.oschirmer.gymtp.settings.SettingsStore;
-import java9.util.function.Consumer;
 
 public class DatesPlanFetcher {
 
     private static DatesPlanFetcher instance;
-    private static Context context;
     private static ExecutorService pool = Executors.newCachedThreadPool();
-    private SettingsStore settingsStore;
 
     private DatesPlan datesCache;
     private LinkedList<Request> queue = new LinkedList<>();
     private boolean fetching = false;
     private static final String url = "http://wp.gymnasium-templin.de/startseite/termine";
 
-    private DatesPlanFetcher(Context context) {
-        this.context = context;
-        this.settingsStore = SettingsStore.getInstance(context);
+    private DatesPlanFetcher() {
     }
 
-    public static void setContext(Context context) {
-        DatesPlanFetcher.context = context;
-    }
-
-    public static DatesPlanFetcher getInstance(Context context) {
+    public static DatesPlanFetcher getInstance() {
         if (instance == null) {
-            instance = new DatesPlanFetcher(context);
+            instance = new DatesPlanFetcher();
         }
         return instance;
     }

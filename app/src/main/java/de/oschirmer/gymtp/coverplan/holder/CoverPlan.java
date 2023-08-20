@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.oschirmer.gymtp.settings.SettingsStore;
-import java9.util.Lists;
 
 public class CoverPlan {
 
@@ -32,7 +31,7 @@ public class CoverPlan {
             boolean teacher = settings.isTeacher();
             int grade = settings.getGrade();
             String teacherName = settings.getTeacherName();
-            Lists.sort(vertretung, (row1, row2) -> {
+            vertretung.sort((row1, row2) -> {
                 int first;
                 int second;
                 if (teacher) {
@@ -52,7 +51,7 @@ public class CoverPlan {
                 }
                 return Integer.compare(second, first);
             });
-            Lists.sort(raum, (row1, row2) -> {
+            raum.sort((row1, row2) -> {
                 int first;
                 int second;
                 if (teacher) {
