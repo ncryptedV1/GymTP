@@ -82,4 +82,16 @@
         android:textSize="16sp"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/privacy_policy_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"
+        android:autoLink="web"
+        android:text="Datenschutz: https://ncryptedv1.github.io/GymTP"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
 </RelativeLayout>
