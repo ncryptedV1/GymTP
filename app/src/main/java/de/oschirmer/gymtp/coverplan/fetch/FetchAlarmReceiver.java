@@ -13,6 +13,8 @@ import androidx.room.Room;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import de.oschirmer.gymtp.GtpActivity;
 import de.oschirmer.gymtp.R;
@@ -44,7 +46,8 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
         //testPush("Test", "Time: " + (new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime())));
         if (SettingsStore.getInstance(context).isPush()) {
             CoverPlanDao dao = GtpDatabaseSingleton.getInstance(context).getCoverPlanDao();
-            AsyncTask.execute(() -> {
+            ExecutorService executor = Executors.newSingleThreadExecutor();
+            executor.execute(() -> {
                 List<CoverPlanRow> oldCoverPlan = dao.getCoverPlan();
                 List<CoverPlanRow> oldRoomPlan = dao.getRoomChangePlan();
                 CoverPlanFetcher.getInstance(context).getCoverPlan(null, coverPlan -> {
