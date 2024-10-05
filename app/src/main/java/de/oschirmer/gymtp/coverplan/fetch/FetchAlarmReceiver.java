@@ -1,14 +1,11 @@
 package de.oschirmer.gymtp.coverplan.fetch;
 
-import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
-import android.os.SystemClock;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
@@ -21,6 +18,7 @@ import de.oschirmer.gymtp.GtpActivity;
 import de.oschirmer.gymtp.R;
 import de.oschirmer.gymtp.coverplan.holder.CoverPlanRow;
 import de.oschirmer.gymtp.settings.SettingsStore;
+import de.oschirmer.gymtp.utils.AlarmHelper;
 
 public class FetchAlarmReceiver extends BroadcastReceiver {
 
@@ -36,14 +34,8 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
         Log.v("fetch", "Started");
 
         // schedule next background fetch
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(context, FetchAlarmReceiver.class);
-        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(context.getApplicationContext(), ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !alarmManager.canScheduleExactAlarms()) {
-            alarmManager.setAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FETCH_TIME, pendingAlarmIntent);
-        } else {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FETCH_TIME, pendingAlarmIntent);
-        }
+        AlarmHelper alarmHelper = new AlarmHelper(context);
+        alarmHelper.scheduleExactAlarm();
 
         // setup cache-database
         Room.databaseBuilder(context.getApplicationContext(), GtpDatabase.class, "gtp-database").build();
@@ -112,8 +104,8 @@ public class FetchAlarmReceiver extends BroadcastReceiver {
         }
     }
 
-    private static int COVERPLAN_GROUP_ID = 1;
-    private static int ROOMCHANGE_GROUP_ID = 2;
+    private static final int COVERPLAN_GROUP_ID = 1;
+    private static final int ROOMCHANGE_GROUP_ID = 2;
     private static int notificationId = 3;
 
     public void groupNotification(boolean roomChangeGroup) {

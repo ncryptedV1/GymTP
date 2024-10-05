@@ -1,19 +1,16 @@
 package de.oschirmer.gymtp;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -23,11 +20,13 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.util.Objects;
+
 import de.oschirmer.gymtp.coverplan.CoverPlanFragment;
-import de.oschirmer.gymtp.coverplan.fetch.FetchAlarmReceiver;
 import de.oschirmer.gymtp.dates.DatesPlanFragment;
 import de.oschirmer.gymtp.settings.SettingsFragment;
 import de.oschirmer.gymtp.settings.SettingsStore;
+import de.oschirmer.gymtp.utils.AlarmHelper;
 
 public class GtpActivity extends AppCompatActivity {
 
@@ -37,6 +36,7 @@ public class GtpActivity extends AppCompatActivity {
     private SettingsFragment settingsFragment;
     private ViewPager viewPager;
     public String htmlDateParam;
+    private AlarmHelper alarmHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,45 +66,43 @@ public class GtpActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        // Load specific date, when opened via URI
+        // load specific date, when opened via URI
         Intent intent = getIntent();
         String action = intent.getAction();
         Uri data = intent.getData();
-        if (action == Intent.ACTION_VIEW) {
+        if (Objects.equals(action, Intent.ACTION_VIEW) && data != null) {
             htmlDateParam = "?d=" + data.getQueryParameter("d");
         }
 
         // register push-notification channel
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.push_channel_name);
-            String description = getString(R.string.push_channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel(getString(R.string.push_channel_id), name, importance);
-            channel.setDescription(description);
-            // Register the channel with the system; you can't change the importance
-            // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
-        }
+        CharSequence name = getString(R.string.push_channel_name);
+        String description = getString(R.string.push_channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(getString(R.string.push_channel_id), name, importance);
+        channel.setDescription(description);
+
+        // register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
 
         // remove existing notifications
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancelAll();
 
-        // start background fetch alarm for coverplan etc
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        Intent alarmIntent = new Intent(this, FetchAlarmReceiver.class);
-        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(getApplicationContext(), FetchAlarmReceiver.ALARM_ID, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            alarmManager.setExactAndAllowWhileIdle(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FetchAlarmReceiver.FETCH_TIME, pendingAlarmIntent);
-        } else {
-            alarmManager.setExact(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + FetchAlarmReceiver.FETCH_TIME, pendingAlarmIntent);
-        }
+        // initialize and check for exact alarm permission
+        alarmHelper = new AlarmHelper(this);
+        alarmHelper.checkAndRequestExactAlarmPermission();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Check again if permission is granted after returning from settings
+        if (alarmHelper != null) {
+            alarmHelper.checkAndRequestExactAlarmPermission();
+        }
+
         SettingsStore store = SettingsStore.getInstance(this);
         store.getPrefs().edit().putBoolean(store.activityStateKey, true).apply();
     }
@@ -124,8 +122,9 @@ public class GtpActivity extends AppCompatActivity {
             super(fm);
         }
 
+        @NonNull
         @Override
-        public Object instantiateItem(ViewGroup container, int position) {
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
             Object fragment = super.instantiateItem(container, position);
             if (position == 0) {
                 coverPlanFragment = (CoverPlanFragment) fragment;
